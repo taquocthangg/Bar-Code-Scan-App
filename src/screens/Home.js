@@ -1,7 +1,21 @@
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
+const baseUrl = 'https://fakestoreapi.com';
+export default function Home({ navigation }) {
+    const [data, setData] = useState([])
+    async function fetchData() {
+        let response = await axios({
+            method: 'get',
+            url: `${baseUrl}/products`,
+        });
+        let product = await response.data;
+        setData(product);
+    }
 
-export default function Home({navigation}) {
+    useEffect(() => {
+        fetchData();
+    }, []);
     return (
         <View style={{
             flex: 1,
@@ -34,7 +48,7 @@ export default function Home({navigation}) {
                 flexDirection: 'row',
                 justifyContent: 'space-around'
             }}>
-                <TouchableOpacity onPress={() => navigation.navigate('Scan')}>
+                <TouchableOpacity onPress={() => navigation.navigate('Scan',data)}>
                     <View style={{
                         alignItems: 'center',
                         backgroundColor: '#F8F8FB',
@@ -210,30 +224,17 @@ export default function Home({navigation}) {
                     <View style={{
                         flexDirection: 'row',
                     }}>
-                        <TouchableOpacity>
-                            <Image
-                                style={styles.products}
-                                source={require('../img/products/1.jpg')}
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Image
-                                style={styles.products}
-                                source={require('../img/products/2.jpg')}
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Image
-                                style={styles.products}
-                                source={require('../img/products/3.jpg')}
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Image
-                                style={styles.products}
-                                source={require('../img/products/4.jpg')}
-                            />
-                        </TouchableOpacity>
+                        {data.map((item) => (
+                            <TouchableOpacity key={item.id} >
+
+                                <Image
+                                    style={styles.products}
+                                    source={{
+                                        uri: item.image,
+                                    }}
+                                />
+                            </TouchableOpacity>
+                        ))}
                     </View>
                 </ScrollView>
             </ScrollView>
@@ -243,7 +244,9 @@ export default function Home({navigation}) {
 
 const styles = StyleSheet.create({
     products: {
-        borderRadius: 10,
-        margin: 20
+        borderRadius: 40,
+        margin: 20,
+        width: 200,
+        height: 200,
     }
 })

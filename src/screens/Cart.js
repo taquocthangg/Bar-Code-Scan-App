@@ -1,7 +1,7 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-export default function Cart({navigation}) {
+export default function Cart({ navigation }) {
     const [cart, setCart] = useState([]);
     useEffect(() => {
         const getCart = async () => {
@@ -29,6 +29,7 @@ export default function Cart({navigation}) {
         setCart(updatedCart);
         AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
     };
+
     const decreaseQuantity = (index) => {
         const updatedCart = [...cart];
         updatedCart[index].quantity -= 1;
@@ -38,6 +39,7 @@ export default function Cart({navigation}) {
         setCart(updatedCart);
         AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
     };
+
     const getTotalPrice = () => {
         return cart.reduce((total, item) => total + item.quantity * item.price, 0);
     };
@@ -68,63 +70,73 @@ export default function Cart({navigation}) {
                 fontWeight: '600'
             }}>Your Cart 👍🏻</Text>
 
-            <View style={{
-                alignItems: 'center',
-            }}>
+            <ScrollView>
                 <View style={{
-                    backgroundColor: '#F8F8FB',
-                    width: '80%',
-                    borderRadius: 10,
-                    padding: 20
+                    alignItems: 'center',
                 }}>
-                    {cart.map((item, index) => (
-                        <View style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: 20
-                        }} key={index}>
-                            <Image source={require('../img/demo.png')} />
-                            <View>
-                                <Text>{item.productName} </Text>
-                                <Text style={{
-                                    color: '#F08F5F',
-                                    fontWeight: '500'
-                                }}>  ₹ {item.price} </Text>
-                            </View>
-
+                    <View style={{
+                        backgroundColor: '#F8F8FB',
+                        width: '90%',
+                        borderRadius: 10,
+                        padding: 20,
+                    }}>
+                        {cart.map((item, index) => (
                             <View style={{
                                 flexDirection: 'row',
-                                gap: 10,
-                                alignItems: 'center'
-                            }}>
-                                <TouchableOpacity onPress={() => decreaseQuantity(index)}>
-                                    <Text style={{
-                                        fontSize: 70,
-                                        color: '#F08F5F'
-                                    }}>-</Text>
-                                </TouchableOpacity>
-
-                                <Text style={{
-                                    fontSize: 20,
-                                    marginTop: 10,
-                                    marginLeft: 10,
-                                    marginRight: 5,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: 20,
+                            }} key={index}>
+                                <View style={{
+                                    flexDirection: 'row',
+                                    gap: 10,
+                                    alignItems: 'center'
                                 }}>
-                                    {item.quantity}
-                                </Text>
+                                    <Image source={{ uri: item.image.uri }} style={{ width: 50, height: 50, borderRadius: 8 }} />
+                                    <View >
+                                        <Text style={{
+                                            width: 130
+                                        }}>{item.productName} </Text>
+                                        <Text style={{
+                                            color: '#F08F5F',
+                                            fontWeight: '500'
+                                        }}>  ₹ {item.price} </Text>
+                                    </View>
+                                </View>
 
-                                <TouchableOpacity onPress={() => increaseQuantity(index)}>
+                                <View style={{
+                                    flexDirection: 'row',
+                                    gap: 10,
+                                    alignItems: 'center'
+                                }}>
+                                    <TouchableOpacity onPress={() => decreaseQuantity(index)}>
+                                        <Text style={{
+                                            fontSize: 70,
+                                            color: '#F08F5F'
+                                        }}>-</Text>
+                                    </TouchableOpacity>
+
                                     <Text style={{
-                                        fontSize: 50,
-                                        color: '#F08F5F'
-                                    }}>+</Text>
-                                </TouchableOpacity>
+                                        fontSize: 20,
+                                        marginTop: 10,
+                                        marginLeft: 10,
+                                        marginRight: 5,
+                                    }}>
+                                        {item.quantity}
+                                    </Text>
+
+                                    <TouchableOpacity onPress={() => increaseQuantity(index)}>
+                                        <Text style={{
+                                            fontSize: 50,
+                                            color: '#F08F5F'
+                                        }}>+</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                        </View>
-                    ))}
+                        ))}
+                    </View>
                 </View>
-            </View>
+            </ScrollView>
             <TouchableOpacity onPress={clearCart}>
                 <Text style={{
                     margin: 30
@@ -150,7 +162,8 @@ export default function Cart({navigation}) {
                 </Text>
             </View>
             <View style={{
-                alignItems: 'center'
+                alignItems: 'center',
+                marginBottom:50
             }}>
                 <TouchableOpacity style={{
                     backgroundColor: '#F08F5F',
@@ -162,7 +175,7 @@ export default function Cart({navigation}) {
                         color: 'white',
                         textAlign: 'center',
                         fontWeight: '500',
-                        fontSize: 20
+                        fontSize: 20,
                     }}>
                         Proceed to checkout
                     </Text>
