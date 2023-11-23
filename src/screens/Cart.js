@@ -163,14 +163,14 @@ export default function Cart({ navigation }) {
             </View>
             <View style={{
                 alignItems: 'center',
-                marginBottom:50
+                marginBottom: 50
             }}>
                 <TouchableOpacity style={{
                     backgroundColor: '#F08F5F',
                     padding: 20,
                     width: '80%',
                     borderRadius: 15
-                }}>
+                }} onPress={() => navigation.navigate('CheckOut')}>
                     <Text style={{
                         color: 'white',
                         textAlign: 'center',
